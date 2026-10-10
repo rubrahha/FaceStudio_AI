@@ -1,0 +1,17 @@
+FACESTUDIO AI v4 — IN-PLACE UPDATE
+=================================
+1. STOP the current FaceStudio server (Ctrl+C).
+2. Extract the ENTIRE FaceStudio_v4_IN_PLACE_UPDATER.zip file.
+3. EASIEST: Double-click APPLY_UPDATE.bat in the extracted updater folder.
+
+   Alternatively open PowerShell IN THAT folder and run:
+
+powershell -ExecutionPolicy Bypass -File .\UPDATE_EXISTING.ps1 -Target "$env:USERPROFILE\Downloads\FaceStudio_AI_Live_v2_Windows\FaceStudio_AI"
+
+4. In the EXISTING project folder, double-click LAUNCH.bat.
+5. Choose a look, allow camera, start camera. Age downloads only if you click Enable age guess.
+6. My people -> import celebrity refs when you want to use Celebrity twin.
+
+If the target has moved, change -Target to the REAL project root.
+The updater refuses to install into its own 'patch' folder.
+Models, .venv and data are preserved. See README.md and ROLLBACK_UPDATE.ps1.

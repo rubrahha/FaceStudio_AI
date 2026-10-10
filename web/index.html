@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f7f8fc">
+  <meta name="description" content="A simple, local-first live camera and photo face analyzer. Only recognize consenting enrolled people.">
+  <title>FaceStudio AI — Live Fun Studio</title>
+  <link rel="stylesheet" href="/app.css">
+  <script src="/effects.js" defer></script>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="site">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <a class="brand" href="/" aria-label="FaceStudio home">
+          <span class="brand-mark" aria-hidden="true"><svg width="25" height="25" viewBox="0 0 24 24" fill="none"><path d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="9" cy="10" r="1" fill="currentColor"/><circle cx="15" cy="10" r="1" fill="currentColor"/><path d="M8.5 15c1.9 2.3 5.1 2.3 7 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>
+          <span class="brand-name">FaceStudio <b>AI</b></span>
+        </a>
+        <nav class="tabs" aria-label="Main navigation">
+          <button class="tab active" data-tab="live" aria-current="page"><svg viewBox="0 0 24 24" width="17" height="17" fill="none"><rect x="3" y="5" width="15" height="14" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="m18 10 4-2v8l-4-2" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> Live camera</button>
+          <button class="tab" data-tab="photo"><svg viewBox="0 0 24 24" width="17" height="17" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.8"/><circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" stroke-width="1.8"/><path d="m4 18 6-6 4 4 2.5-2.5L21 18" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> Upload photo</button>
+          <button class="tab" data-tab="people"><svg viewBox="0 0 24 24" width="17" height="17" fill="none"><circle cx="12" cy="8" r="3.3" stroke="currentColor" stroke-width="1.8"/><path d="M5 21v-2c0-3 2.7-5 7-5s7 2 7 5v2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> My people</button>
+        </nav>
+        <div class="local-badge"><span class="local-dot"></span><span>Private &amp; local</span></div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="intro">
+        <div><div class="eyebrow"><span class="eyebrow-dot"></span> YOUR AI VISION STUDIO</div>
+          <h1 id="pageTitle">Look different, <span>have fun.</span></h1>
+          <p id="pageDesc">10 live filters, playful face animations, AI age guesses and your celebrity twin — right on your computer.</p>
+        </div>
+        <div class="engine-pill" id="enginePill" title="The AI engine runs on this computer"><span class="engine-icon">✦</span><span id="engineLabel">Checking AI models…</span></div>
+      </div>
+
+      <section class="page active" id="page-live" aria-label="Live camera">
+        <div class="work-grid">
+          <div class="work-left">
+            <div class="card camera-card">
+              <div class="card-header"><div><div class="mini-label">LIVE FUN STUDIO · VERSION 4</div><h2>Your camera</h2></div><span id="camIndicator" class="camera-status"><span></span> Camera off</span></div>
+              <div class="mode-bar" role="group" aria-label="Camera mode">
+                <button type="button" class="mode-chip selected" data-mode="studio">✦ Studio</button>
+                <button type="button" class="mode-chip" data-mode="celebrity">★ Celebrity twin</button>
+                <button type="button" class="mode-chip" data-mode="party">✨ Fun filters</button>
+                <button type="button" class="mode-chip" data-mode="vision">◈ Face points</button>
+              </div>
+              <div id="modeDescription" class="mode-description">Your live AI playground — 10 looks, face animations and age guesses.</div>
+              <div class="camera-controls">
+                <div class="camera-main-actions">
+                  <button class="btn btn-primary" id="cameraToggle"><svg viewBox="0 0 24 24" width="18" height="18" fill="none"><rect x="2.5" y="5.5" width="15" height="13" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="m17.5 10 4-2v8l-4-2" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg> <span>Start camera</span></button>
+                  <button class="btn btn-soft" id="cameraCapture" disabled title="Capture a frame to the photo analyzer">Take photo</button><button class="btn btn-soft" id="saveSelfie" disabled title="Save a selfie with the camera effect">↓ Save selfie</button>
+                </div>
+                <label class="permission"><input id="allowCamera" type="checkbox"><span>I have permission from everyone on camera</span></label>
+              </div>
+              <div class="viewport" id="cameraBox">
+                <video id="camera" autoplay muted playsinline aria-label="Live camera video"></video>
+                <canvas id="liveCanvas" aria-hidden="true"></canvas>
+                <div id="cameraPlaceholder" class="camera-placeholder">
+                  <div class="placeholder-art"><span class="face-focus"><svg viewBox="0 0 72 72" width="72" height="72" fill="none"><path d="M18 10h-6a5 5 0 0 0-5 5v8M54 10h6a5 5 0 0 1 5 5v8M7 49v8a5 5 0 0 0 5 5h6m47-13v8a5 5 0 0 1-5 5h-6" stroke="#d3c8ff" stroke-width="4" stroke-linecap="round"/><circle cx="28" cy="33" r="2.7" fill="#b6a6fc"/><circle cx="45" cy="33" r="2.7" fill="#b6a6fc"/><path d="M26 44c6 6 14 6 20 0" stroke="#b6a6fc" stroke-width="3.6" stroke-linecap="round"/></svg></span></div>
+                  <h3>Ready when you are</h3>
+                  <p>Start your camera to see live face detection and insights.</p>
+                </div>
+                <span class="live-overlay-indicator hidden" id="liveOverlayIndicator">● LIVE</span>
+              </div>
+              <section class="effects-tray" aria-label="Camera looks and live face effects">
+                <div class="effects-head"><div><b>Pick a look</b><small>10 instant filters · no extra downloads</small></div><span class="effects-count">10 LOOKS</span></div>
+                <div id="filterStrip" class="filter-strip" role="group" aria-label="Choose photo filter"></div>
+                <div class="morph-section"><div><b>Animated face</b><small>Playful live face morphs</small></div><div class="morph-buttons" id="morphButtons" role="group" aria-label="Choose a face animation"></div></div>
+              </section>
+<div id="celebrityPrompt" class="celebrity-prompt hidden"><span>⭐ Add celebrity references to get lookalike suggestions.</span> <button class="text-button" id="goCelebrities">Set up in 1 click →</button></div>
+              <div class="camera-foot"><span id="cameraHint">Camera stays off until you press Start.</span><span class="foot-privacy">No cloud uploads <span aria-hidden="true">✳</span></span></div>
+            </div>
+            <details class="options" id="advancedOptions"><summary><span><svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 17h16M9 4v6m6 4v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> More options</span><span class="options-caption">Optional AI features <span class="chevron">⌄</span></span></summary>
+              <div class="options-body">
+                <label class="option"><span><b>Recognize registered people</b><small>Only faces you have registered with consent</small></span><input id="optRecognize" type="checkbox" checked></label>
+                <label class="option"><span><b>Estimate age range</b><small>AI guess, not a verified age</small></span><input id="optAge" type="checkbox" checked></label>
+                <label class="option"><span><b>Appearance estimate</b><small>Optional male/female-coded appearance; cannot identify gender</small></span><input id="optAppearance" type="checkbox"></label>
+                <div id="ageSetup" class="age-setup hidden"><div><b>🎂 Age guess not installed</b><small>Optional AI model. Download only when you choose.</small></div><button type="button" id="enableAge" class="btn btn-soft">Enable age guess</button><small id="ageDownloadStatus" class="age-download-status" role="status"></small></div>
+                <small id="modelHint" class="model-hint">Optional features depend on installed models.</small><button type="button" class="text-button" id="reloadModels">↻ Reload downloaded models</button>
+              </div>
+            </details>
+          </div>
+          <aside class="insights card" aria-live="polite">
+            <div class="card-header"><div><div class="mini-label">LIVE INSIGHTS</div><h2>Your live results</h2></div><span class="insights-badge">✦ AI</span></div>
+            <div class="face-count-panel"><div><span class="small-overline">FACES ON SCREEN</span><div id="liveCount" class="face-count">—</div></div><span class="count-icon" aria-hidden="true"><svg width="33" height="33" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="9" r="4" stroke="currentColor" stroke-width="1.7"/><path d="M4 22v-3c0-3.5 3.5-5.5 8-5.5s8 2 8 5.5v3" stroke="currentColor" stroke-width="1.7"/></svg></span></div>
+            <div id="liveResults" class="face-results"><div class="insight-empty"><div class="empty-emoji">✳</div><b>Waiting for your camera</b><p>Your results will show up here automatically.</p></div></div>
+            <div id="challengeCard" class="challenge-card"><span class="challenge-icon">🎯</span><div><b id="challengeTitle">Selfie challenge</b><p id="challengeText">Start your camera to get a simple lighting and framing challenge.</p></div></div><p class="results-disclaimer">Celebrity twins are entertainment-only comparisons. Age and appearance are uncertain guesses; photo score is about image quality.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="page" id="page-photo" aria-label="Analyze a photo">
+        <div class="work-grid">
+          <div class="work-left">
+            <div class="card upload-card">
+              <div class="card-header"><div><div class="mini-label">PHOTO ANALYZER</div><h2>Choose a photo</h2></div><span class="file-caption">JPG, PNG or WebP · 8 MB max</span></div>
+              <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Choose or drop a photo">
+                <span class="drop-icon"><svg width="37" height="37" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="1.6"/><path d="M12 17V9m0 0-3 3m3-3 3 3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                <h3>Drop a picture here</h3><p>Or select a photo from your device.</p>
+                <button class="btn btn-primary" id="browseBtn">Choose photo</button>
+              </div>
+              <input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+              <div class="photo-preview hidden" id="previewPanel"><div class="photo-stage"><img id="previewImage" alt="Chosen photo for analysis"><canvas id="photoCanvas" aria-hidden="true"></canvas></div><button class="text-button" id="replaceBtn">↻ Change photo</button></div>
+              <div class="photo-action-bar"><label class="permission"><input type="checkbox" id="allowAnalyze"><span>I have permission to analyze this photo</span></label><button class="btn btn-primary" id="analyzeBtn" disabled>Analyze photo →</button></div>
+              <label class="permission photo-celeb-option"><input type="checkbox" id="photoCelebMode" checked><span>Also find my celebrity twin (when gallery is ready)</span></label><p class="quiet" id="fileHint">Images are analyzed in memory and not saved.</p>
+            </div>
+          </div>
+          <aside class="insights card"><div class="card-header"><div><div class="mini-label">YOUR REPORT</div><h2>Photo insights</h2></div><button class="text-button hidden" id="exportBtn">↓ JSON</button></div><div id="photoResults" class="face-results"><div class="insight-empty"><div class="empty-emoji">◇</div><b>Nothing analyzed yet</b><p>Upload a photo to get started.</p></div></div><p class="results-disclaimer">The photo score measures image quality, not personal attractiveness.</p></aside>
+        </div>
+      </section>
+
+      <section class="page" id="page-people" aria-label="Registered people">
+        <div class="people-grid">
+          <div class="card people-card"><div class="card-header"><div><div class="mini-label">PRIVATE RECOGNITION</div><h2>Add a person</h2></div><span class="insights-badge">Local only</span></div>
+            <p class="section-desc">Register someone who agrees to be recognized. Add a clear, front-facing picture. No photo is saved—only a face embedding.</p>
+            <form id="enrollForm"><label class="form-label" for="enrollName">Person's name</label><input id="enrollName" class="field" placeholder="e.g. Alex" minlength="2" maxlength="64" required>
+              <label class="form-label" for="enrollPhoto">Face photo</label><input id="enrollPhoto" class="field file-field" type="file" accept="image/jpeg,image/png,image/webp" required>
+              <label class="permission permission-block"><input id="enrollConsent" type="checkbox" required><span>This person explicitly agreed to local face recognition</span></label>
+              <button class="btn btn-primary full" id="enrollSubmit" type="submit">Save person</button></form>
+          </div>
+          <div class="card people-card"><div class="card-header"><div><div class="mini-label">YOUR GALLERY</div><h2>Saved people <span id="galleryCount" class="people-count">0</span></h2></div><button id="clearGallery" class="text-button danger">Delete all</button></div><p class="section-desc">Manage or remove saved face profiles anytime.</p><div id="peopleList" class="people-list"></div></div>
+        </div>
+      <section class="celeb-section" id="celebSection">
+        <div class="celeb-banner"><div class="celeb-banner-icon">★</div><div><div class="mini-label">CELEBRITY TWIN STUDIO</div><h2>Who is your celebrity twin?</h2><p>Build a small local reference collection. Matches compare face geometry — not identity, family relationships or exact likeness.</p></div></div>
+        <div class="celebrity-grid">
+          <div class="card celebrity-card"><h3>Start with famous faces</h3><p>One tap imports available portrait thumbnails from Wikipedia for a private, local gallery. This requires internet only for the reference photos — never for your webcam.</p>
+            <button id="starterButton" class="btn btn-primary full">★ Import 16 famous faces</button><button id="expandedButton" class="btn btn-soft full" style="margin-top:9px">+ Explore 60+ celebrity names</button><small id="catalogDescription" class="catalog-description">Reference images download only after you choose; some may be unavailable.</small><div class="import-status" id="importStatus">Optional, one-time action. Some portraits may be unavailable.</div>
+          </div>
+          <div class="card celebrity-card"><h3>Add your favorite celebrity</h3><p>Use a portrait you're allowed to use, with one clear face.</p>
+            <form id="celebrityForm"><input id="celebrityName" class="field" placeholder="Celebrity name" minlength="2" maxlength="64" required><input id="celebrityPhoto" class="field file-field" type="file" accept="image/jpeg,image/png,image/webp" required><label class="permission permission-block"><input id="celebrityRights" type="checkbox" required><span>I may use this reference photo privately</span></label><button id="celebritySubmit" class="btn btn-soft full" type="submit">+ Add face</button></form>
+          </div>
+        </div>
+        <div class="card gallery-card"><div class="card-header"><div><div class="mini-label">YOUR LOCAL REFERENCES</div><h2>Celebrity gallery <span id="celebrityCount" class="people-count">0</span></h2></div><button id="clearCelebrities" class="text-button danger">Clear gallery</button></div><div id="celebrityList" class="reference-grid"></div></div>
+      </section>
+      </section>
+      <footer>Made for easy, private face analysis <span>•</span> Not for security authentication or judging people</footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
